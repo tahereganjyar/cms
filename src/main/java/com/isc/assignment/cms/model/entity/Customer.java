@@ -13,7 +13,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "USNID", length = 10)
+    @Column(name = "USNID", length = 10, nullable = false)
     private String nationalCode;
 
     @Column(name = "USPH")

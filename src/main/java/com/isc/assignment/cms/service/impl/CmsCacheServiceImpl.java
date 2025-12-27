@@ -1,5 +1,6 @@
 package com.isc.assignment.cms.service.impl;
 
+import com.isc.assignment.cms.common.BusinessException;
 import com.isc.assignment.cms.config.AsyncConfiguration;
 import com.isc.assignment.cms.model.dto.CardInfoDto;
 import com.isc.assignment.cms.model.dto.CustomerInfoDto;
@@ -50,7 +51,8 @@ public class CmsCacheServiceImpl implements CmsCacheService {
                 try {
                     Object[] rowSplits = row.split(",");
                     if (rowSplits.length != 13) {
-                        throw new RuntimeException("فرمت داده های فایل اطلاعات اولیه صحیح نیست");
+                        logger.error("فرمت داده های فایل اطلاعات اولیه صحیح نیست");
+                        return;
                     }
                     CustomerInfoDto customerInfo = getCustomerInfo(rowSplits);
                     CardInfoDto cardInfo = getCardInfoDto(rowSplits);
@@ -75,7 +77,7 @@ public class CmsCacheServiceImpl implements CmsCacheService {
                 }
             });
         } catch (Exception e) {
-            throw new RuntimeException("خطا در خواندن فایل داده های اولیه");
+            throw new BusinessException("خطا در خواندن فایل داده های اولیه");
         }
     }
 

@@ -14,23 +14,23 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "CDNUM", length = 16)
+    @Column(name = "CDNUM", length = 16, nullable = false)
     private String number;
 
-    @Column(name = "CDISC", length = 6)
+    @Column(name = "CDISC", length = 6, nullable = false)
     private String issuerCode;
 
     @Column(name = "CDISN")
     private String issuerName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "CDTYP")
+    @Column(name = "CDTYP", nullable = false)
     private CardTypeEnum type;
 
     @Column(name = "CDEXP")
     private String expireDate;
 
-    @Column(name = "CDANU", length = 10)
+    @Column(name = "CDANU", length = 10, nullable = false)
     private String accountNumber;
 
     @Column(name = "CDACT")
@@ -40,7 +40,7 @@ public class Card {
     @JoinColumn(name = "CUS_ID")
     private Customer customer;
 
-    @Column(name = "CDSER", length = 3)
+    @Column(name = "CDSER", length = 3, nullable = false)
     private String serial;
 
     @Override
