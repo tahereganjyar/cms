@@ -7,6 +7,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +32,15 @@ public class CardController {
                     "باتوجه به اینکه مشصخصات مشتری همراه با اطلاعات کارت ارسال میشود" +
                     " در صورت عدم وجود مشتری موردنظر، خطای مناسب نمایش داده میشود")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "موفق بودن عملیات"),
+            @ApiResponse(responseCode = "201", description = "موفق بودن عملیات"),
+            @ApiResponse(responseCode = "500", description = "خطای ناشناخته"),
+            @ApiResponse(responseCode = "400", description = "خطای نامعتبر بودن داده های ارسالی"),
             @ApiResponse(responseCode = "401", description = "خطای دسترسی غیرمجاز")
     })
     @PostMapping(value = "/v1/cards")
-    public void registerNewCard(@RequestBody RegisterNewCardRequestDto registerNewCardRequest) {
+    public ResponseEntity registerNewCard(@Valid @RequestBody RegisterNewCardRequestDto registerNewCardRequest) {
 
-         cardManagementService.registerNewCard(registerNewCardRequest);
+        cardManagementService.registerNewCard(registerNewCardRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

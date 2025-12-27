@@ -1,5 +1,6 @@
 package com.isc.assignment.cms.service.impl;
 
+import com.isc.assignment.cms.common.BusinessException;
 import com.isc.assignment.cms.model.dto.CardInfoDto;
 import com.isc.assignment.cms.model.dto.CustomerInfoDto;
 import com.isc.assignment.cms.model.dto.RegisterNewCardRequestDto;
@@ -31,7 +32,7 @@ public class CardManagementServiceImpl implements CardManagementService {
     public void registerNewCard(RegisterNewCardRequestDto registerNewCardRequest) {
 
         Customer customer = customerRepository.findByNationalCode(registerNewCardRequest.getNationalCode())
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new BusinessException("برای کدملی ارسالی ، هیج مشتری ایی یافت نشد"));
         Card card = new Card.Builder()
                 .accountNumber(registerNewCardRequest.getAccountNumber())
                 .expireDate(registerNewCardRequest.getExpireDate())
@@ -58,6 +59,7 @@ public class CardManagementServiceImpl implements CardManagementService {
                 .accountNumber(card.getAccountNumber())
                 .active(card.getActive())
                 .expireDate(card.getExpireDate())
+                .serial(card.getSerial())
                 .build();
         cardService.registerCard(card, customer);
         if (Boolean.TRUE.equals(cardInfo.getActive())) {

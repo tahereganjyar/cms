@@ -1,5 +1,6 @@
 package com.isc.assignment.cms.service.impl;
 
+import com.isc.assignment.cms.common.BusinessException;
 import com.isc.assignment.cms.repository.CardRepository;
 import com.isc.assignment.cms.service.api.CardValidationService;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class CardValidationServiceImpl implements CardValidationService {
         long countCardsBySerial = cardRepository.countBySerial(cardSerial);
         if (countCardsBySerial != 0) {
 
-            throw new RuntimeException("card has registered before!!!");
+            throw new BusinessException("باشماره سریال ارسالی قبلا کارتی ثبت شده است");
         }
     }
 }

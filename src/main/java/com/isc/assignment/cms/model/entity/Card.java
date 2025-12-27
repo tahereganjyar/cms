@@ -86,7 +86,6 @@ public class Card {
         private String serial;
 
 
-
         public Builder id(Long id) {
 
             this.id = id;

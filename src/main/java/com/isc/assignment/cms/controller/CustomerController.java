@@ -8,6 +8,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -27,14 +30,16 @@ public class CustomerController {
     @Operation(summary = "ثبت مشتری جدید",
             description = "این سرویس با دریافت اطلاعات مشتری آن را ثبت میکند")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "موفق بودن عملیات"),
-            @ApiResponse(responseCode = "201", description = "یافت نشدن اطلاعات"),
+            @ApiResponse(responseCode = "201", description = "موفق بودن عملیات"),
+            @ApiResponse(responseCode = "500", description = "خطای ناشناخته"),
+            @ApiResponse(responseCode = "400", description = "خطای نامعتبر بودن داده های ارسالی"),
             @ApiResponse(responseCode = "401", description = "خطای دسترسی غیرمجاز")
     })
     @PostMapping("/v1/customers")
-    public void registerNewCustomer(@RequestBody RegisterNewCustomerRequestDto registerNewCustomer) {
+    public ResponseEntity registerNewCustomer(@Valid @RequestBody RegisterNewCustomerRequestDto registerNewCustomer) {
 
         customerManagementService.registerNewCustomer(registerNewCustomer);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "بازیابی تمامی کارتهای یک مشتری بر اساس کد ملی",
@@ -42,12 +47,19 @@ public class CustomerController {
                     " در صورت نبودن این اطلاعات، مشخصات کارتها از دیتابیس بازیابی میشود")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "موفق بودن عملیات"),
-            @ApiResponse(responseCode = "201", description = "یافت نشدن اطلاعات"),
+            @ApiResponse(responseCode = "500", description = "خطای ناشناخته"),
+            @ApiResponse(responseCode = "400", description = "خطای نامعتبر بودن داده های ارسالی"),
+            @ApiResponse(responseCode = "204", description = "خالی بودن نتیجه"),
             @ApiResponse(responseCode = "401", description = "خطای دسترسی غیرمجاز")
     })
     @GetMapping("/v1/customers/{nationalCode}/cards")
-    public Set<CardInfoDto> getCardsOfCustomer(@PathVariable String nationalCode) {
+    public ResponseEntity<Set<CardInfoDto>> getCardsOfCustomer(@PathVariable String nationalCode) {
 
-        return customerManagementService.getCardsOfCustomer(nationalCode);
+        Set<CardInfoDto> result = customerManagementService.getCardsOfCustomer(nationalCode);
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
     }
 }
