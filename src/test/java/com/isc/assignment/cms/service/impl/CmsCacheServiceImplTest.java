@@ -25,13 +25,10 @@ class CmsCacheServiceImplTest {
 
     private CmsCacheService cmsCacheService;
 
-    @InjectMocks
     private CardService cardService;
 
-    @InjectMocks
     private CustomerService customerService;
 
-    @InjectMocks
     private CardValidationService cardValidationService;
 
 
