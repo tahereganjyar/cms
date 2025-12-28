@@ -36,10 +36,10 @@ public class CustomerController {
             @ApiResponse(responseCode = "401", description = "خطای دسترسی غیرمجاز")
     })
     @PostMapping("/v1/customers")
-    public ResponseEntity registerNewCustomer(@Valid @RequestBody RegisterNewCustomerRequestDto registerNewCustomer) {
+    public ResponseEntity<String> registerNewCustomer(@Valid @RequestBody RegisterNewCustomerRequestDto registerNewCustomer) {
 
         customerManagementService.registerNewCustomer(registerNewCustomer);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>("ثبت مشتری جدید با موفقیت انجام شد",HttpStatus.CREATED);
     }
 
     @Operation(summary = "بازیابی تمامی کارتهای یک مشتری بر اساس کد ملی",

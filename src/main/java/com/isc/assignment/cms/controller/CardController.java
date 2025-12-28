@@ -41,6 +41,6 @@ public class CardController {
     public ResponseEntity registerNewCard(@Valid @RequestBody RegisterNewCardRequestDto registerNewCardRequest) {
 
         cardManagementService.registerNewCard(registerNewCardRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>("ثبت کارت جدید با موفقیت انجام شد",HttpStatus.CREATED);
     }
 }
