@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "سرویس های مدیریت کارت")
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/v1/cards")
 public class CardController {
 
     private final CardManagementService cardManagementService;
@@ -37,10 +37,13 @@ public class CardController {
             @ApiResponse(responseCode = "400", description = "خطای نامعتبر بودن داده های ارسالی"),
             @ApiResponse(responseCode = "401", description = "خطای دسترسی غیرمجاز")
     })
-    @PostMapping(value = "/v1/cards")
-    public ResponseEntity registerNewCard(@Valid @RequestBody RegisterNewCardRequestDto registerNewCardRequest) {
+    @PostMapping
+    public ResponseEntity<ResponseDto> registerNewCard(@Valid @RequestBody RegisterNewCardRequestDto registerNewCardRequest) {
 
         cardManagementService.registerNewCard(registerNewCardRequest);
-        return new ResponseEntity<>("ثبت کارت جدید با موفقیت انجام شد",HttpStatus.CREATED);
+        ResponseDto<Boolean> response = new ResponseDto<>();
+        response.setMessage("ثبت کارت جدید با موفقیت انجام شد");
+        response.setResult(Boolean.TRUE);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

@@ -6,7 +6,14 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "CARD")
+@Table(name = "CARD",
+        indexes = {
+                @Index(
+                        name = "idx_card_cus_id_active",
+                        columnList = "CUS_ID, CDACT"
+                )
+        }
+)
 public class Card {
 
     @Id

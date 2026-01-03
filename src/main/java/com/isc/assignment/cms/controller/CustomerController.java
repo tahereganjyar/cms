@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Tag(name = "سرویس های مدیریت مشتری")
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/v1/customers")
 public class CustomerController {
 
     private final CustomerManagementService customerManagementService;
@@ -35,11 +35,14 @@ public class CustomerController {
             @ApiResponse(responseCode = "400", description = "خطای نامعتبر بودن داده های ارسالی"),
             @ApiResponse(responseCode = "401", description = "خطای دسترسی غیرمجاز")
     })
-    @PostMapping("/v1/customers")
-    public ResponseEntity<String> registerNewCustomer(@Valid @RequestBody RegisterNewCustomerRequestDto registerNewCustomer) {
+    @PostMapping
+    public ResponseEntity<ResponseDto> registerNewCustomer(@Valid @RequestBody RegisterNewCustomerRequestDto registerNewCustomer) {
 
         customerManagementService.registerNewCustomer(registerNewCustomer);
-        return new ResponseEntity<>("ثبت مشتری جدید با موفقیت انجام شد",HttpStatus.CREATED);
+        ResponseDto<Boolean> response = new ResponseDto<>();
+        response.setResult(Boolean.TRUE);
+        response.setMessage("ثبت مشتری جدید با موفقیت انجام شد");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @Operation(summary = "بازیابی تمامی کارتهای یک مشتری بر اساس کد ملی",
@@ -52,14 +55,16 @@ public class CustomerController {
             @ApiResponse(responseCode = "204", description = "خالی بودن نتیجه"),
             @ApiResponse(responseCode = "401", description = "خطای دسترسی غیرمجاز")
     })
-    @GetMapping("/v1/customers/{nationalCode}/cards")
-    public ResponseEntity<Set<CardInfoDto>> getCardsOfCustomer(@PathVariable String nationalCode) {
+    @GetMapping("{nationalCode}/cards")
+    public ResponseEntity<ResponseDto> getCardsOfCustomer(@PathVariable String nationalCode) {
 
         Set<CardInfoDto> result = customerManagementService.getCardsOfCustomer(nationalCode);
+        ResponseDto<Set<CardInfoDto>> response = new ResponseDto<>();
+        response.setResult(result);
         if (result.isEmpty()) {
-            return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
     }
 }

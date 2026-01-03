@@ -17,37 +17,52 @@ public class CmsExceptionHandler {
     private final Logger logger = LoggerFactory.getLogger(CmsExceptionHandler.class);
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+    public ResponseEntity<ResponseDto> handleIllegalArgumentException(IllegalArgumentException ex) {
 
         logger.error("Error is:", ex);
-        return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+        ResponseDto<Boolean> response = new ResponseDto<>();
+        response.setMessage("Error: " + ex.getMessage());
+        response.setResult(Boolean.FALSE);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<String> handleValidationException(ConstraintViolationException ex) {
+    public ResponseEntity<ResponseDto> handleValidationException(ConstraintViolationException ex) {
 
         logger.error("Error is:", ex);
-        return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+        ResponseDto<Boolean> response = new ResponseDto<>();
+        response.setMessage("Error: " + ex.getMessage());
+        response.setResult(Boolean.FALSE);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ResponseDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
 
         logger.error("Error is:", ex);
-        return new ResponseEntity<>("Error: " + ex.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        ResponseDto<Boolean> response = new ResponseDto<>();
+        response.setMessage("Error: " + ex.getFieldError().getDefaultMessage());
+        response.setResult(Boolean.FALSE);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<String> handleBusinessException(Exception ex) {
+    public ResponseEntity<ResponseDto> handleBusinessException(Exception ex) {
 
         logger.error("Error is:", ex);
-        return new ResponseEntity<>("A business error occurred: " + ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        ResponseDto<Boolean> response = new ResponseDto<>();
+        response.setMessage("A business error occurred: " + ex.getMessage());
+        response.setResult(Boolean.FALSE);
+        return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneralException(BusinessException ex) {
+    public ResponseEntity<ResponseDto> handleGeneralException(BusinessException ex) {
 
         logger.error("Error is:", ex);
-        return new ResponseEntity<>("An unexpected error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        ResponseDto<Boolean> response = new ResponseDto<>();
+        response.setMessage("An unexpected error occurred: " + ex.getMessage());
+        response.setResult(Boolean.FALSE);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

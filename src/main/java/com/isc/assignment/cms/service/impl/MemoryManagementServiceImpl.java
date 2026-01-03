@@ -11,6 +11,19 @@ public class MemoryManagementServiceImpl implements MemoryManagementService {
 
     private final Logger logger = LoggerFactory.getLogger(MemoryManagementServiceImpl.class);
 
+    /**
+     * Logs JVM heap memory usage statistics at fixed intervals.
+     * <p>
+     * This scheduled task runs according to the cron expression defined in
+     * the {@code memory.usage.pattern} configuration property. It logs key
+     * heap memory metrics including total, free, used, and maximum memory
+     * available to the JVM.
+     * </p>
+     *
+     * <p>
+     * All memory values are logged in megabytes (MB).
+     * </p>
+     */
     @Scheduled(cron = "${memory.usage.pattern}")
     @Override
     public void printMemoryUsage() {

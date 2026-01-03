@@ -28,6 +28,24 @@ public class CardManagementServiceImpl implements CardManagementService {
         this.customerRepository = customerRepository;
     }
 
+    /**
+     * Registers a new card for an existing customer.
+     * <p>
+     * This method first retrieves the customer using the national code provided
+     * in {@link RegisterNewCardRequestDto}. If no matching customer is found,
+     * a {@link BusinessException} is thrown.
+     * </p>
+     *
+     * <p>
+     * After successful customer retrieval, a {@link Card} entity is created from
+     * the request data and persisted via {@code cardService.registerCard(Card, Customer)}.
+     * If the card is marked as active, the card information is also stored in the cache.
+     * </p>
+     *
+     * @param registerNewCardRequest the DTO containing card registration data;
+     *                               must not be {@code null}
+     * @throws BusinessException if no customer exists for the provided national code
+     */
     @Override
     public void registerNewCard(RegisterNewCardRequestDto registerNewCardRequest) {
 

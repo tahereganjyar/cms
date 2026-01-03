@@ -23,6 +23,24 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerValidationService = customerValidationService;
     }
 
+    /**
+     * Retrieves an existing customer by national code or registers a new one if none exists.
+     * <p>
+     * This method provides an idempotent way to obtain a {@link Customer} instance.
+     * If a customer with the given national code already exists, it is returned.
+     * Otherwise, a new customer is safely created and persisted.
+     * </p>
+     *
+     * <p>
+     * To prevent duplicate customer creation in concurrent environments,
+     * a synchronization lock is used during the registration process.
+     * </p>
+     *
+     * @param customer the customer entity to retrieve or register;
+     *                 must not be {@code null}
+     * @return the existing or newly registered {@link Customer};
+     *         never {@code null}
+     */
     @Override
     public Customer getOrRegisterCustomer(Customer customer) {
 
